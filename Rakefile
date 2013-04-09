@@ -18,7 +18,7 @@ task :all_ruby do
     Bundler.with_clean_env do
       with_clean_rbenv do
         Dir.chdir(dir) do
-          sh 'rbenv exec bundle install --path=vendor/bundle >/dev/null 2>&1'
+          sh 'rbenv exec bundle install --path=vendor/bundle'
         end
       end
     end
@@ -28,8 +28,12 @@ end
 desc 'Bundler env & rbenv env & chdir ALL controll by shell command'
 task :all_shell do
   %w(r19 r20).each do |dir|
-    sh "unset BUNDLE_GEMFILE RUBYOPT GEM_HOME RBENV_VERSION RBENV_DIR; cd #{dir}; rbenv exec bundle install --path=vendor/bundle >/dev/null 2>&1"
+    sh "unset BUNDLE_GEMFILE RUBYOPT GEM_HOME RBENV_VERSION RBENV_DIR; cd #{dir}; rbenv exec bundle install --path=vendor/bundle"
   end
+end
+
+task :parent_gem do
+  sh 'bundle exec gem list redis'
 end
 
 task :clean do
@@ -46,12 +50,13 @@ task :display do
   %w(r19 r20).each do |dir|
     Dir.chdir(dir) do
       sh 'tree -L 4'
+      sh "find . -type d -name 'redis'"
     end
   end
 end
 
 [:all_ruby, :all_shell].each do |task|
-  Rake::Task[task].enhance([:clean]) do
+  Rake::Task[task].enhance([:clean, :parent_gem]) do
     Rake::Task[:display].invoke
   end
 end
