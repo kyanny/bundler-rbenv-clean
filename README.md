@@ -7,8 +7,12 @@
 * サブディレクトリにある Gemfile を解釈して gem をインストールする
 * サブディレクトリに .ruby-version があったらそのバージョンの Ruby で bundle install する
 
-    $ bundle exec rake all_ruby
-    $ bundle exec rake all_shell
+
+```
+$ bundle exec rake all_ruby
+$ bundle exec rake all_shell
+```
+
 
 ## 考察
 
